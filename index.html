@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>料金シミュレーター</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #f6be5a;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input[type="checkbox"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .fixed-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f6be5a;
+            color: #ffffff;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 1.5em;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .hero-image {
+            width: 100%;
+            height: auto;
+            background-color: #f6be5a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .hero-image img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+        .plan-cards {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 40px;
+        }
+        .plan-card {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: 45%;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .plan-card img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .plan-card input[type="radio"] {
+            margin-top: 10px;
+        }
+        .plan-card:hover {
+            transform: scale(1.05);
+            border-color: #f6be5a;
+        }
+        .total-price {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f6be5a;
+            color: #ffffff;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 1.5em;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .form-group:last-child {
+            margin-bottom: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero-image">
+            <img src="3.png" alt="ヒーロー画像">
+        </div>
+        <h1>料金シミュレーター</h1>
+
+        <form id="simulator-form">
+            <div class="plan-cards">
+                <div class="plan-card" onclick="selectPlan('A')">
+                    <img src="mini.png" alt="Aプラン">
+                    <div>A. ミニキャラクタープラン</div>
+                    <input type="radio" name="plan" value="A" id="plan-a">
+                </div>
+                <div class="plan-card" onclick="selectPlan('B')">
+                    <img src="standard.png" alt="Bプラン">
+                    <div>B. スタンダードプラン</div>
+                    <input type="radio" name="plan" value="B" id="plan-b">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">個数を選択</label>
+                <select id="quantity">
+                    <option value="" disabled selected>選択する</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="size">サイズを選択(単位：mm)</label>
+                <select id="size">
+                    <option value="30x30" data-price-a="0" data-price-b="0">30×30</option>
+                    <option value="40x40" data-price-a="0" data-price-b="0">40×40</option>
+                    <option value="50x50" data-price-a="100" data-price-b="0">50×50</option>
+                    <option value="60x60" data-price-a="200" data-price-b="0">60×60</option>
+                    <option value="70x60" data-price-a="300" data-price-b="0">70×60</option>
+                    <option value="80x70" data-price-a="400" data-price-b="300">80×70</option>
+                    <option value="90x80" data-price-a="500" data-price-b="400">90×80</option>
+                    <option value="100x90" data-price-a="600" data-price-b="500">100×90</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>お急ぎ便の利用</label>
+                <input type="checkbox" id="rush-order" onclick="toggleRushDays()" aria-controls="rush-days" aria-expanded="false"> あり
+                <select id="rush-days" style="display: none;" aria-hidden="true">
+                    <option value="7">7日</option>
+                    <option value="10">10日</option>
+                    <option value="14">14日</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="colors">カラー追加</label>
+                <select id="colors">
+                    <option value="0">なし</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>台座の制作</label>
+                <input type="checkbox" id="stand"> あり
+            </div>
+
+            <div class="form-group">
+                <label>イラスト生成</label>
+                <input type="checkbox" id="illustration"> あり
+            </div>
+
+            <div class="form-group">
+                <label>割引特典の適用</label>
+                <input type="checkbox" id="discount"> 適用
+            </div>
+        </form>
+
+        <div class="total-price">合計金額: <span id="total-price">0</span>円</div>
+    </div>
+
+    <script>
+       const normalPrices = {
+            A: [8000, 6500, 6000, 5500, 5200, 5000, 4800, 4600, 4400, 4200, 4000, 3800, 3700, 3600, 3500, 3400, 3300, 3200, 3100, 3000, 2900, 2800, 2700, 2600],
+            B: [20000, 9000, 8850, 8650, 8500, 8350, 8150, 8000, 7850, 7650, 7500, 7300, 7150, 7000, 6800, 6650, 6500, 6300, 6150, 6000, 5800, 5650, 5500, 5450, 5400, 5350, 5300, 5250, 5200, 5100],
+        };
+
+        const campaignPrices = {
+            A: [8000, 5525, 5100, 4675, 4420, 4250, 4080, 3910, 3825, 3740, 3655, 3570, 3485, 3400, 3315, 3230, 3145, 3060, 2975, 2890, 2805, 2720, 2635, 2550, 2465, 2380, 2350, 2300, 2280, 2250],
+            B: [20000, 7000, 6904, 6808, 6711, 6615, 6519, 6423, 6327, 6231, 6135, 6039, 5943, 5846, 5750, 5654, 5558, 5462, 5366, 5270, 5174, 5078, 4982, 4886, 4790, 4694, 4598, 4502, 4406, 4300],
+        };
+
+        const rushOrderPrice = {
+            7: 0.3,
+            10: 0.2,
+            14: 0.1,
+        };
+        const standPrice = 300;
+        const illustrationPrice = 1500;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const quantitySelect = document.getElementById("quantity");
+            for (let i = 1; i <= 30; i++) {
+                const option = document.createElement("option");
+                option.value = i;
+                option.textContent = i;
+                quantitySelect.appendChild(option);
+            }
+        });
+
+        function selectPlan(plan) {
+            document.getElementById("plan-a").checked = plan === 'A';
+            document.getElementById("plan-b").checked = plan === 'B';
+            calculateTotal();
+        }
+
+        document.querySelectorAll('#simulator-form input, #simulator-form select').forEach(element => {
+            element.addEventListener('change', calculateTotal);
+        });
+
+        function toggleRushDays() {
+            const rushOrder = document.getElementById("rush-order").checked;
+            const rushDays = document.getElementById("rush-days");
+            rushDays.style.display = rushOrder ? "block" : "none";
+        }
+
+        function calculateTotal() {
+            const plan = document.getElementById("plan-a").checked ? 'A' : 'B';
+            const quantity = parseInt(document.getElementById("quantity").value, 10);
+            const size = document.getElementById("size");
+            const sizePrice = size.options[size.selectedIndex].dataset[`price${plan}`];
+            const rushOrder = document.getElementById("rush-order").checked;
+            const rushDays = rushOrder ? document.getElementById("rush-days").value : null;
+            const colors = parseInt(document.getElementById("colors").value, 10);
+            const stand = document.getElementById("stand").checked;
+            const illustration = document.getElementById("illustration").checked;
+            const discount = document.getElementById("discount").checked;
+
+            if (isNaN(quantity)) {
+                document.getElementById("total-price").textContent = 0;
+                return;
+            }
+
+            const prices = discount ? campaignPrices[plan] : normalPrices[plan];
+
+            let totalPrice = 0;
+            if (quantity === 1) {
+                totalPrice = prices[0];
+            } else {
+                const unitPrice = prices[Math.min(quantity - 1, prices.length - 1)];
+                totalPrice = prices[0] + (quantity - 1) * unitPrice;
+            }
+
+            totalPrice += parseInt(sizePrice, 10) * quantity;
+
+            if (stand) {
+                totalPrice += standPrice * quantity;
+            }
+
+            if (illustration) {
+                totalPrice += illustrationPrice;
+            }
+
+            totalPrice += colors * 1500 * quantity;
+
+            // お急ぎ便料金を最後に追加
+            if (rushOrder && rushDays) {
+                totalPrice += totalPrice * rushOrderPrice[rushDays];
+            }
+
+            document.getElementById("total-price").textContent = Math.round(totalPrice);
+        }
+    </script>
+</body>
+</html>
+
