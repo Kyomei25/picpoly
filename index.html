@@ -267,7 +267,10 @@
                 totalPrice += illustrationPrice;
             }
 
-            totalPrice += colors * 1500 * quantity;
+            // カラー追加料金の計算
+            if (colors > 0) {
+                totalPrice += colors * (1500 + (quantity - 1) * 200);
+            }
 
             // お急ぎ便料金を最後に追加
             if (rushOrder && rushDays) {
@@ -279,4 +282,3 @@
     </script>
 </body>
 </html>
-
