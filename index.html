@@ -124,14 +124,14 @@
             </div>
 
             <div class="form-group">
-                <label for="quantity">個数を選択</label>
+                <label for="quantity">何個注文しますか？</label>
                 <select id="quantity">
                     <option value="" disabled selected>選択する</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="size">サイズを選択(単位：mm)※Bプランは60×60mmからのみ制作可能</label>
+                <label for="size">サイズを選んでください(単位：mm)※Bプランは60×60mmからのみ制作可能</label>
                 <select id="size">
                     <option value="30x30" data-price-a="0" data-price-b="0">30×30</option>
                     <option value="40x40" data-price-a="0" data-price-b="0">40×40</option>
@@ -145,7 +145,7 @@
             </div>
 
             <div class="form-group">
-                <label>お急ぎ便の利用</label>
+                <label>お急ぎ便の利用（通常納期は２週間〜４週間です）</label>
                 <input type="checkbox" id="rush-order" onclick="toggleRushDays()" aria-controls="rush-days" aria-expanded="false"> あり
                 <select id="rush-days" style="display: none;" aria-hidden="true">
                     <option value="7">7日</option>
@@ -155,7 +155,8 @@
             </div>
 
             <div class="form-group">
-                <label for="colors">カラー追加</label>
+                <label for="colors">カラー追加（４色は基本料金内。５色以上のカラーを使う場合は追加する色数を選択）</label><p>カラーについての詳細は<a href="https://picpoly.official.ec/blog/2024/12/28/195137" target="_blank">こちら</a>をご確認ください。</p>
+
                 <select id="colors">
                     <option value="0">なし</option>
                     <option value="1">1</option>
@@ -167,12 +168,12 @@
             </div>
 
             <div class="form-group">
-                <label>台座の制作</label>
+                <label>台座の制作（バランスの不安定なフィギュアは台座がないと自立しません）</label>
                 <input type="checkbox" id="stand"> あり
             </div>
 
             <div class="form-group">
-                <label>イラスト生成</label>
+                <label>イラスト生成（イラストがない方向けのオプションです）</label>
                 <input type="checkbox" id="illustration"> あり
             </div>
 
